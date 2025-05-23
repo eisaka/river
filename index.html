@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>강가 - 모바일 수정 버전</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: left;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    #scene1, #scene2 {
+      display: none;
+    }
+    #scene1 {
+      display: block;
+    }
+    #scene1-text {
+      white-space: pre-wrap;
+    }
+    #hint {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      font-size: 10px;
+    }
+    #scene2 {
+      background-color: white;
+      color: black;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      display: none;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    #scene2-start {
+      font-size: 14px;
+      margin-top: 40px;
+      padding: 0 20px;
+      text-align: center;
+    }
+    #scene2-image {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: none;
+    }
+    #dialogue-box {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 30px;
+      width: 90%;
+      background-color: black;
+      color: white;
+      font-size: 14px;
+      padding: 10px;
+      border: 2px solid white;
+      display: none;
+      text-align: center;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body onclick="handleClick()">
+  <div id="hint">(진행하려면 화면 터치)</div>
+  <div id="scene1">
+    <div id="scene1-text"></div>
+  </div>
+
+  <div id="scene2">
+    <div id="scene2-start">
+      새 한 무리가 강물 위에서 헤엄친다<br>
+      우리는 고향을 등지고 메마른 땅 위에 서 있다
+    </div>
+    <img id="scene2-image" src="scene2_bird_mobile.png" alt="scene2">
+    <div id="dialogue-box"></div>
+  </div>
+
+  <script>
+    const scene1Lines = [
+      "햇빛이 유리상자를 따갑게 두들긴다",
+      "그 온도가 마음에 들지 않아 천천히 눈을 뜬다",
+      "......물을 보러 가자.",
+      "......",
+      "물냄새.",
+      "목소리.",
+      "누군가 나에게 말을 건넨다",
+      "저기 물 위에서 일렁이는 것이 보인다",
+      "......",
+      "내게 다가오고 있어."
+    ];
+
+    const scene2Lines = [
+      "우리는 바다에 터 잡고 살던 조상을 뒤로 하고 육지로 상경했지",
+      "결국 물이 그리워 향수병이 생겼어 아마 영원히 낫지 않을 거야",
+      "병에 시달리는 삶이 애처롭기도 하고 한 편의 우화 연극 같기도 하고",
+      "우리는 관객이며 동시에 배우인데 무대에 막이 내릴 기미는 보이지가 않네",
+      "새와 눈이 마주친다\n비웃는 표정으로 그가 하늘을 가른다",
+      "도시의 아스팔트 흙바닥을 아무리 오래 밟아도 근본이 변할 수는 없더라",
+      "그래서 자꾸 여기로 오는거지 기쁠 때도 슬플 때도 귀성길에 오르는거야",
+      "향수병을 달래기 위해…",
+      "우리는 하늘을 날며 보았어",
+      "너희가 쌓아 올린 육지의 연장선이 끝도 없이 높더라",
+      "새로운 고향을 찾으려는 노력이 재밌더라…"
+    ];
+
+    let scene = 1;
+    let idx1 = 0;
+    let idx2 = 0;
+    const scene1TextDiv = document.getElementById("scene1-text");
+
+    function handleClick() {
+      if (scene === 1) {
+        if (idx1 < scene1Lines.length) {
+          scene1TextDiv.innerHTML += scene1Lines[idx1] + "<br>";
+          idx1++;
+        } else {
+          document.body.style.backgroundColor = "white";
+          setTimeout(() => {
+            document.getElementById("scene1").style.display = "none";
+            document.getElementById("scene2").style.display = "flex";
+            scene = 2;
+          }, 3000);
+        }
+      } else if (scene === 2) {
+        const img = document.getElementById("scene2-image");
+        const start = document.getElementById("scene2-start");
+        const box = document.getElementById("dialogue-box");
+
+        if (idx2 === 0) {
+          start.style.display = "none";
+          img.style.display = "block";
+          box.style.display = "block";
+          box.textContent = scene2Lines[idx2++];
+        } else if (idx2 < scene2Lines.length) {
+          box.textContent = scene2Lines[idx2++];
+        }
+      }
+    }
+  </script>
+</body>
+</html>
