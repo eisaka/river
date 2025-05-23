@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>강가 - Scene 2</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: white;
+      color: black;
+      font-family: 'Press Start 2P', monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    #scene-text {
+      font-size: 14px;
+      line-height: 2;
+    }
+
+    #image-scene {
+      display: none;
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    #main-image {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+
+    #dialogue-box {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: black;
+      color: white;
+      border-top: 2px solid white;
+      font-size: 12px;
+      padding: 20px;
+      text-align: center;
+      font-family: 'Press Start 2P', monospace;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body onclick="nextText()">
+  <div id="scene-1">
+    <div id="scene-text">
+      새 한 무리가 강물 위에서 헤엄친다<br>
+      우리는 고향을 등지고 메마른 땅 위에 서 있다
+    </div>
+  </div>
+
+  <div id="image-scene">
+    <img id="main-image" src="scene2_bird.png" alt="scene image">
+    <div id="dialogue-box"></div>
+  </div>
+
+  <script>
+    const dialogueLines = [
+      "우리는 바다에 터 잡고 살던 조상을 뒤로 하고 육지로 상경했지",
+      "결국 물이 그리워 향수병이 생겼어 아마 영원히 낫지 않을 거야",
+      "병에 시달리는 삶이 애처롭기도 하고 한 편의 우화 연극 같기도 하고",
+      "우리는 관객이며 동시에 배우인데 무대에 막이 내릴 기미는 보이지가 않네",
+      "새와 눈이 마주친다\n비웃는 표정으로 그가 하늘을 가른다",
+      "도시의 아스팔트 흙바닥을 아무리 오래 밟아도 근본이 변할 수는 없더라",
+      "그래서 자꾸 여기로 오는거지 기쁠 때도 슬플 때도 귀성길에 오르는거야",
+      "향수병을 달래기 위해…",
+      "우리는 하늘을 날며 보았어",
+      "너희가 쌓아 올린 육지의 연장선이 끝도 없이 높더라",
+      "새로운 고향을 찾으려는 노력이 재밌더라…"
+    ];
+
+    let currentDialogue = 0;
+    let inImageScene = false;
+    let sceneStarted = false;
+
+    function nextText() {
+      if (!sceneStarted) {
+        document.getElementById('scene-1').style.display = 'none';
+        document.getElementById('image-scene').style.display = 'flex';
+        document.getElementById('dialogue-box').textContent = dialogueLines[currentDialogue];
+        currentDialogue++;
+        sceneStarted = true;
+        inImageScene = true;
+        return;
+      }
+
+      if (inImageScene && currentDialogue < dialogueLines.length) {
+        document.getElementById('dialogue-box').textContent = dialogueLines[currentDialogue];
+        currentDialogue++;
+      }
+    }
+  </script>
+</body>
+</html>
