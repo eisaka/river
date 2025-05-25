@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>강가 - Scene 1 & 2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      font-family: 'Press Start 2P', monospace;
+      overflow: hidden;
+    }
+
+    .scene {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    #scene1 {
+      background-color: black;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 20px;
+      font-size: 17px;
+      white-space: pre-line;
+    }
+
+    #prompt {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 14px;
+      z-index: 10;
+    }
+
+    #fadeout {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: black;
+      animation: fadeToWhite 3s forwards;
+      z-index: 20;
+      display: none;
+    }
+
+    @keyframes fadeToWhite {
+      0% { background-color: black; }
+      100% { background-color: white; }
+    }
+
+    #scene2 {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background-color: white;
+    }
+
+    #scene2-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      display: none;
+    }
+
+    #scene2-start {
+      font-size: 17px;
+      color: black;
+      text-align: center;
+      width: 100%;
+      margin-top: 60px;
+      white-space: pre-line;
+    }
+
+    #dialogue-box {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      background-color: black;
+      color: white;
+      padding: 30px;
+      font-size: 19px;
+      white-space: pre-line;
+      text-align: left;
+      border: 2px solid white;
+      display: none;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body onclick="handleClick()">
+
+<div id="scene1" class="scene" style="display: block;">
+  <div id="prompt">&lt;진행하려면 화면 터치&gt;</div>
+  <div id="scene1-text"></div>
+</div>
+
+<div id="fadeout"></div>
+
+<div id="scene2" class="scene">
+  <img id="scene2-bg" src="" />
+  <div id="scene2-start">새 한 무리가 강물 위에서 헤엄친다\n우리는 고향을 등지고 메마른 땅 위에 서 있다</div>
+  <div id="dialogue-box"></div>
+</div>
+
+<script>
+const scene1Lines = [
+  "햇빛이 유리상자를 따갑게 두들긴다",
+  "그 온도가 마음에 들지 않아 천천히 눈을 뜬다",
+  "......물을 보러 가자.",
+  "......",
+  "물냄새.",
+  "목소리.",
+  "누군가 나에게 말을 건넨다",
+  "저기 물 위에서 일렁이는 것이 보인다",
+  "......",
+  "내게 다가오고 있어."
+];
+
+const scene2Lines = [
+  { text: "우리는 바다에 터 잡은 조상을\n뒤로 하고 육지로 상경했지", bg: "scene2_bird_mobile.png" },
+  { text: "결국 물이 그리워 향수병이 생겼어\n아마 영원히 낫지 않을 거야" },
+  { text: "병에 시달리는 삶이 애처롭기도 하고\n한 편의 우화 연극 같기도 하고\n우리는 관객이며 동시에 배우인데\n무대에 막이 내릴 기미는\n보이지가 않네" },
+  { text: "새와 눈이 마주친다", bg: "scene2_flying_bird.png" },
+  { text: "비웃는 표정으로 그가 하늘을 날아간다" },
+  { text: "도시의 아스팔트 흙바닥을\n아무리 오래 밟아도\n근본이 변할 수는 없더라" },
+  { text: "그래서 여기로 오는 거지\n기쁠 때도 슬플 때도\n귀성길에 오르는 거야\n향수병을 달래기 위해……" },
+  { text: "우리는 하늘을 날며 보았어\n너희가 쌓아 올린 육지의 연장선을\n참 끝도 없이 높더라!\n새로운 고향을 찾으려는\n그 노력이 재밌더라" }
+];
+
+let s1Index = 0;
+let s2Index = 0;
+let inScene2 = false;
+
+function handleClick() {
+  if (!inScene2) {
+    const textBox = document.getElementById("scene1-text");
+    if (s1Index < scene1Lines.length) {
+      textBox.innerHTML += scene1Lines[s1Index] + "\n";
+      s1Index++;
+    } else {
+      document.getElementById("prompt").style.display = "none";
+      document.getElementById("fadeout").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("scene1").style.display = "none";
+        document.getElementById("fadeout").style.display = "none";
+        document.getElementById("scene2").style.display = "block";
+        inScene2 = true;
+      }, 3000);
+    }
+  } else {
+    const start = document.getElementById("scene2-start");
+    const dialogue = document.getElementById("dialogue-box");
+    const bg = document.getElementById("scene2-bg");
+
+    if (s2Index === 0) {
+      start.style.display = "none";
+      dialogue.style.display = "block";
+    }
+
+    if (s2Index < scene2Lines.length) {
+      dialogue.innerHTML = scene2Lines[s2Index].text.replaceAll("\\n", "\n");
+      if (scene2Lines[s2Index].bg) {
+        bg.src = scene2Lines[s2Index].bg;
+        bg.style.display = "block";
+      }
+      s2Index++;
+    }
+  }
+}
+</script>
+</body>
+</html>
